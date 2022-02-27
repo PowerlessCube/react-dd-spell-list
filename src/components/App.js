@@ -2,23 +2,14 @@ import React from 'react';
 import ClassForm from './ClassForm';
 import SpellDisplay from './SpellDisplay';
 
-import { AppRequests } from '../shared/constants/constants';
-import useFetchData from '../shared/hooks/useFetchData';
+import useGetCharacterClassSpells from '../shared/hooks/useGetCharacterClassSpells';
 
 function App() {
   const [characterClass, setCharacterClass] = React.useState(null);
-  const API_REQUESTS = new AppRequests(characterClass);
-  const { results } = useFetchData(API_REQUESTS.GET_CLASS_SPELLS);
-
-  const [formattedSpells, setFormattedSpells] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [selectedSpells, setSelectedSpells] = React.useState([]);
-
-  React.useEffect(() => {
-    results &&
-      setFormattedSpells(
-        results.map((spell) => ({ ...spell, selected: false }))
-      );
-  }, [results]);
+  const [formattedSpells, setFormattedSpells] =
+    useGetCharacterClassSpells(characterClass);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -45,7 +36,7 @@ function App() {
   const handleDeSelection = (e) => {
     setSelectedSpells(selectedSpells.filter((ss) => ss.index !== e.target.id));
     setFormattedSpells([
-      ...results
+      ...selectedSpells
         .filter((ss) => ss.index === e.target.id)
         .map((ss) => ({
           ...ss,
@@ -59,25 +50,35 @@ function App() {
     <div>
       <h1>Class Spell List</h1>
       <div className="container">
-        <div className="row">
-          <div className="col">
-            <ClassForm handleChange={handleChange} />
+        {isLoading ? (
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </div>
-          <div className="col">
-            <SpellDisplay
-              title={'Class Spells'}
-              spells={formattedSpells}
-              handleSelection={handleSelection}
-            />
+        ) : (
+          <div className="row">
+            <div className="col">
+              <ClassForm handleChange={handleChange} />
+            </div>
+            <div className="col">
+              <SpellDisplay
+                title={'Class Spells'}
+                count={formattedSpells.length}
+                spells={formattedSpells}
+                handleSelection={handleSelection}
+              />
+            </div>
+            <div className="col">
+              <SpellDisplay
+                title={'Selected Spells'}
+                count={selectedSpells.length}
+                spells={selectedSpells}
+                handleSelection={handleDeSelection}
+              />
+            </div>
           </div>
-          <div className="col">
-            <SpellDisplay
-              title={'Selected Spells'}
-              spells={selectedSpells}
-              handleSelection={handleDeSelection}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -20,10 +20,4 @@ const AppRequests = class {
   }
 };
 
-const CLASSES = {
-  WARLOCK: { isSpellCaster: true, index: 'warlock' },
-  PALADIN: { isSpellCaster: true, index: 'paladin' },
-  FIGHTER: { isSpellCaster: false, index: 'false' },
-};
-
-export { CLASSES, AppRequests };
+export { AppRequests };

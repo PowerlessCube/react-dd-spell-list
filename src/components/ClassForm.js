@@ -1,5 +1,6 @@
-import { CLASSES } from '../shared/constants/constants';
+import useGetClasses from '../shared/hooks/useGetClasses';
 const ClassForm = ({ handleChange }) => {
+  const { results } = useGetClasses();
   return (
     <form>
       <div className="mb-3">
@@ -14,15 +15,12 @@ const ClassForm = ({ handleChange }) => {
           onChange={handleChange}
         >
           <option value={null}>--Please choose a class--</option>
-          {Object.keys(CLASSES).reduce((prevKey, key) => {
-            if (!CLASSES[key].isSpellCaster) return prevKey;
-            prevKey.push(
-              <option key={CLASSES[key].index} value={CLASSES[key].index}>
-                {CLASSES[key].index}
+          {results &&
+            results.map((res) => (
+              <option key={res.index} value={res.index}>
+                {res.index}
               </option>
-            );
-            return prevKey;
-          }, [])}
+            ))}
         </select>
       </div>
     </form>

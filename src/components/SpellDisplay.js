@@ -1,7 +1,9 @@
-const SpellDisplay = ({ title, spells, handleSelection }) => {
+const SpellDisplay = ({ title, spells, handleSelection, count }) => {
   return (
     <>
-      <h2>{title}</h2>
+      <h2>
+        {title} ({count})
+      </h2>
       <div className="container">
         {spells &&
           spells.map((spell) => (
