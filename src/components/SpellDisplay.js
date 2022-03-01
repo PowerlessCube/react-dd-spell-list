@@ -1,32 +1,21 @@
-const SpellDisplay = ({ title, spells, handleSelection, count }) => {
+import useGetSpellInfo from '../shared/hooks/useGetSpellInfo';
+
+const SpellDisplay = ({ spellIndex }) => {
+  const spellData = useGetSpellInfo(spellIndex);
   return (
-    <>
-      <h2>
-        {title} ({count})
-      </h2>
-      <div className="container">
-        {spells &&
-          spells.map((spell) => (
-            <div key={spell.index} className="row">
-              <div href={spell.index} className="col">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id={spell.index}
-                    checked={spell.selected}
-                    onChange={handleSelection}
-                  />
-                  <label className="form-check-label" htmlFor={spell.index}>
-                    {spell.name}
-                  </label>
-                </div>
-              </div>
-            </div>
-          ))}
+    spellData && (
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">{spellData.name}</h5>
+          <h6 className="card-subtitle mb-2 text-muted">
+            {spellData.casting_time}
+          </h6>
+          <p className="card-text">{spellData.desc}</p>
+
+          <p className="card-text">{spellData.higher_level}</p>
+        </div>
       </div>
-    </>
+    )
   );
 };
 

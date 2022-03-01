@@ -1,20 +1,21 @@
 import React from 'react';
 import ClassForm from './ClassForm';
-import SpellDisplay from './SpellDisplay';
-
+import SpellList from './SpellList';
 import useGetCharacterClassSpells from '../shared/hooks/useGetCharacterClassSpells';
+import SpellDisplay from './SpellDisplay';
 
 function App() {
   const [characterClass, setCharacterClass] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [selectedSpells, setSelectedSpells] = React.useState([]);
   const [formattedSpells, setFormattedSpells] =
     useGetCharacterClassSpells(characterClass);
+  const [spellIndex, setSpellIndex] = React.useState(null);
 
   const handleChange = (e) => {
     e.preventDefault();
     setSelectedSpells([]);
     setFormattedSpells([]);
+    setSpellIndex(null);
     setCharacterClass(e.target.value);
   };
 
@@ -46,39 +47,38 @@ function App() {
     ]);
   };
 
+  const handleSpellSelection = (index) => {
+    setSpellIndex(index);
+  };
+
   return (
     <div>
       <h1>Class Spell List</h1>
       <div className="container">
-        {isLoading ? (
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
+        <div className="row">
+          <div className="col">
+            <ClassForm handleChange={handleChange} />
+            <SpellDisplay spellIndex={spellIndex} />
           </div>
-        ) : (
-          <div className="row">
-            <div className="col">
-              <ClassForm handleChange={handleChange} />
-            </div>
-            <div className="col">
-              <SpellDisplay
-                title={'Class Spells'}
-                count={formattedSpells.length}
-                spells={formattedSpells}
-                handleSelection={handleSelection}
-              />
-            </div>
-            <div className="col">
-              <SpellDisplay
-                title={'Selected Spells'}
-                count={selectedSpells.length}
-                spells={selectedSpells}
-                handleSelection={handleDeSelection}
-              />
-            </div>
+          <div className="col">
+            <SpellList
+              title={'Class Spells'}
+              count={formattedSpells.length}
+              spells={formattedSpells}
+              handleSelection={handleSelection}
+              handleSpellSelection={handleSpellSelection}
+            />
           </div>
-        )}
+          <div className="col">
+            <SpellList
+              title={'Selected Spells'}
+              count={selectedSpells.length}
+              spells={selectedSpells}
+              handleSelection={handleDeSelection}
+              handleSpellSelection={handleSpellSelection}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

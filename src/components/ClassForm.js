@@ -1,6 +1,6 @@
 import useGetClasses from '../shared/hooks/useGetClasses';
 const ClassForm = ({ handleChange }) => {
-  const { results } = useGetClasses();
+  const results = useGetClasses();
   return (
     <form>
       <div className="mb-3">

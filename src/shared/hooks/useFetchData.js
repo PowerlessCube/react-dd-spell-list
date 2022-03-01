@@ -5,7 +5,10 @@ const useFetchData = (url = null) => {
 
   const getData = React.useCallback(
     async (url = null) => {
-      if (url === null) return;
+      if (url === null) {
+        setData(null);
+        return;
+      }
       try {
         const res = await fetch(url);
         checkForFetchError(res).then(setData);
