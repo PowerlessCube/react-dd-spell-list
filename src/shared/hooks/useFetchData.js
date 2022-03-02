@@ -1,7 +1,7 @@
 import React from 'react';
 
 const useFetchData = (url = null) => {
-  const [data, setData] = React.useState({});
+  const [data, setData] = React.useState(null);
 
   const getData = React.useCallback(
     async (url = null) => {

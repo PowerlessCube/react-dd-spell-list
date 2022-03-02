@@ -1,8 +1,10 @@
 import useFetchData from './useFetchData';
+import { ClassRequests } from '../constants/constants';
 
 const useGetClasses = () => {
-  const data = useFetchData('https://www.dnd5eapi.co/api/classes/');
-  return data.results;
+  const API_REQUESTS = new ClassRequests();
+  const data = useFetchData(API_REQUESTS.GET_CHARACTER_CLASSES);
+  return data && data.results;
 };
 
 export default useGetClasses;
