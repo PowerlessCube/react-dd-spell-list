@@ -1,9 +1,9 @@
 import useFetchData from './useFetchData';
+import { AppRequests } from '../helpers/appRequests';
 
 function useGetSpellInfo(spellIndex) {
-  const spellData = useFetchData(
-    spellIndex && `https://www.dnd5eapi.co/api/spells/${spellIndex}`
-  );
+  const API_REQUESTS = new AppRequests(spellIndex);
+  const spellData = useFetchData(API_REQUESTS.GET_SPELL_BY_INDEX);
   return spellData;
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import { ClassRequests } from '../constants/constants';
+import { AppRequests } from '../helpers/appRequests';
 import useFetchData from './useFetchData';
 
 function useGetCharacterClassSpells(characterClass) {
   const [formattedSpells, setFormattedSpells] = React.useState([]);
-  const API_REQUESTS = new ClassRequests(characterClass);
+  const API_REQUESTS = new AppRequests(characterClass);
   const data = useFetchData(API_REQUESTS.GET_CLASS_SPELLS);
 
   React.useEffect(() => {
