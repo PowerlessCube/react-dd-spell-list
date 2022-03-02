@@ -11,7 +11,7 @@ const SpellDisplay = ({ spellIndex }) => {
     spellData && (
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">{spellData.name}</h5>
+          <h4 className="card-title">{spellData.name}</h4>
           <h6 className="card-subtitle mb-2 text-muted">
             {spellData &&
               spellData.school &&
