@@ -4,11 +4,12 @@ const SpellList = ({
   handleSelection,
   handleSpellSelection,
   count,
+  spellSlots,
 }) => {
   return (
     <>
       <h2>
-        {title} ({count})
+        {title} ({count} / {spellSlots})
       </h2>
       <div className="container">
         {spells &&

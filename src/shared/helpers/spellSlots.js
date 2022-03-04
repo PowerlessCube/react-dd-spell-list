@@ -1,7 +1,7 @@
 import { CLASSSPELLCASTING } from '../../constants/classSpellCasting';
 
 const SpellSlots = class {
-  constructor(classIndex, characterLevel = 1) {
+  constructor(classIndex = 'bard', characterLevel = 1) {
     this.classIndex = classIndex;
     this.characterLevel = characterLevel;
   }
@@ -13,7 +13,11 @@ const SpellSlots = class {
   CLASSSPELLCASTING;
 
   spellsByClassAndLevel() {
-    return CLASSSPELLCASTING[this.classIndex][this.characterLevel];
+    return (
+      this.classIndex !== null &&
+      this.characterLevel !== null &&
+      CLASSSPELLCASTING[this.classIndex][this.characterLevel]
+    );
   }
 
   get GET_SPELL_SLOTS() {

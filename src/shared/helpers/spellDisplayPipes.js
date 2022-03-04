@@ -28,4 +28,9 @@ const formatDuration = (duration, isConcentration = false) => {
   return `Concentration, ${duration}`;
 };
 
-export { formatSpellSubtitle, formatComponents, formatDuration };
+export {
+  formatSpellSubtitle,
+  formatComponents,
+  formatDuration,
+  convertToOrdinalNumber,
+};
