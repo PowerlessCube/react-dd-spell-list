@@ -2,16 +2,17 @@ import React from 'react';
 import { AppRequests } from '../helpers/appRequests';
 import useFetchData from './useFetchData';
 
-function useGetCharacterClassSpellsByLevel(
+function useGetCharacterClassSpellsBySpellSlots(
   characterClass = null,
-  characterLevel = null
+  spellSlots = null
 ) {
   const [formattedSpells, setFormattedSpells] = React.useState([]);
 
   const CLASS_SPELL_REQUEST = new AppRequests(characterClass);
   const classSpellList = useFetchData(CLASS_SPELL_REQUEST.GET_CLASS_SPELLS);
-
-  const SPELL_BY_LEVEL_REQUEST = new AppRequests(characterLevel);
+  const params = spellSlots && spellSlots.map((ss, index) => index).join(',');
+  console.log({ params });
+  const SPELL_BY_LEVEL_REQUEST = new AppRequests(params);
   const spellsByLevel = useFetchData(
     SPELL_BY_LEVEL_REQUEST.GET_SPELLS_BY_LEVEL
   );
@@ -33,4 +34,4 @@ function useGetCharacterClassSpellsByLevel(
   return [formattedSpells, setFormattedSpells];
 }
 
-export default useGetCharacterClassSpellsByLevel;
+export default useGetCharacterClassSpellsBySpellSlots;

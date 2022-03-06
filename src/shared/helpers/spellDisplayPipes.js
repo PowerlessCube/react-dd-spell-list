@@ -28,7 +28,13 @@ const formatDuration = (duration, isConcentration = false) => {
   return `Concentration, ${duration}`;
 };
 
+const formatSpellSlotTitle = (index) => {
+  if (index === 0) return 'Cantrips';
+  return `${convertToOrdinalNumber(index)} Spell Level`;
+};
+
 export {
+  formatSpellSlotTitle,
   formatSpellSubtitle,
   formatComponents,
   formatDuration,

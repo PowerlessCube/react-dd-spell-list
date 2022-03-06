@@ -17,7 +17,6 @@ const ClassForm = ({ handleSubmit }) => {
           id="class-select"
           className="form-select"
           aria-label="Please choose a class"
-          // onChange={handleSubmit}
         >
           <option value={null}>--Please choose a class--</option>
           {results &&

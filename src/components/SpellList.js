@@ -3,14 +3,12 @@ const SpellList = ({
   spells,
   handleSelection,
   handleSpellSelection,
-  count,
-  spellSlots,
+  spellSlotCount = null,
 }) => {
   return (
     <>
-      <h2>
-        {title} ({count} / {spellSlots})
-      </h2>
+      <h2>{title}</h2>
+      {spellSlotCount && <h3>{`${spells.length} / ${spellSlotCount}`}</h3>}
       <div className="container">
         {spells &&
           spells.map((spell) => (
