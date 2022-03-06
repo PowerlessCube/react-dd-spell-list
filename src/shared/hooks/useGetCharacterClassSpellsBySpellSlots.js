@@ -10,9 +10,9 @@ function useGetCharacterClassSpellsBySpellSlots(
 
   const CLASS_SPELL_REQUEST = new AppRequests(characterClass);
   const classSpellList = useFetchData(CLASS_SPELL_REQUEST.GET_CLASS_SPELLS);
-  const params = spellSlots && spellSlots.map((ss, index) => index).join(',');
-  console.log({ params });
-  const SPELL_BY_LEVEL_REQUEST = new AppRequests(params);
+  const SPELL_BY_LEVEL_REQUEST = new AppRequests(
+    spellSlots && spellSlots.map((ss, index) => index).join(',')
+  );
   const spellsByLevel = useFetchData(
     SPELL_BY_LEVEL_REQUEST.GET_SPELLS_BY_LEVEL
   );

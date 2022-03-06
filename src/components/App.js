@@ -90,6 +90,7 @@ function App() {
               spellSlots.map((ss, index) => {
                 return (
                   <SpellList
+                    key={formatSpellSlotTitle(index)}
                     title={formatSpellSlotTitle(index)}
                     spellSlotCount={ss}
                     spells={selectedSpells}
