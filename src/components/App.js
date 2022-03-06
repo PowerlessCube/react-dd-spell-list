@@ -13,8 +13,10 @@ function App() {
     characterLevel
   );
   const [selectedSpells, setSelectedSpells] = React.useState([]);
-  const [formattedSpells, setFormattedSpells] =
-    useGetCharacterClassSpells(characterClass);
+  const [formattedSpells, setFormattedSpells] = useGetCharacterClassSpells(
+    characterClass,
+    characterLevel
+  );
   const [spellIndex, setSpellIndex] = React.useState(null);
 
   const handleSubmit = (e) => {
