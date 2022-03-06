@@ -12,38 +12,15 @@ test('instantiates a "SpellSlots" object with default level 1 one only given cla
   expect(sut.characterLevel).toEqual(1);
 });
 
-const cases = [
-  [
+let cases = [];
+for (let i = 1; i <= 20; i++) {
+  cases.push([
     'bard',
-    1,
-    CLASSSPELLCASTING.bard['1'].spellSlots,
-    CLASSSPELLCASTING.bard['1'].spellsKnown,
-  ],
-  [
-    'bard',
-    2,
-    CLASSSPELLCASTING.bard['2'].spellSlots,
-    CLASSSPELLCASTING.bard['2'].spellsKnown,
-  ],
-  [
-    'bard',
-    3,
-    CLASSSPELLCASTING.bard['3'].spellSlots,
-    CLASSSPELLCASTING.bard['3'].spellsKnown,
-  ],
-  [
-    'bard',
-    4,
-    CLASSSPELLCASTING.bard['4'].spellSlots,
-    CLASSSPELLCASTING.bard['4'].spellsKnown,
-  ],
-  [
-    'bard',
-    5,
-    CLASSSPELLCASTING.bard['5'].spellSlots,
-    CLASSSPELLCASTING.bard['5'].spellsKnown,
-  ],
-];
+    i,
+    CLASSSPELLCASTING.bard[`${i}`].spellSlots,
+    CLASSSPELLCASTING.bard[`${i}`].spellsKnown,
+  ]);
+}
 
 test.each(cases)(
   '"given %p and %p as arguments, GET_SPELL_SLOTS returns %p and GET_SPELLS_KNOWN_COUNT returns %p"',
