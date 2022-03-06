@@ -1,7 +1,7 @@
 import React from 'react';
 import ClassForm from './ClassForm';
 import SpellList from './SpellList';
-import useGetCharacterClassSpells from '../shared/hooks/useGetCharacterClassSpells';
+import useGetCharacterClassSpellsByLevel from '../shared/hooks/useGetCharacterClassSpellsByLevel';
 import useGetClassSpellData from '../shared/hooks/useGetClassSpellData';
 import SpellDisplay from './SpellDisplay';
 
@@ -13,10 +13,8 @@ function App() {
     characterLevel
   );
   const [selectedSpells, setSelectedSpells] = React.useState([]);
-  const [formattedSpells, setFormattedSpells] = useGetCharacterClassSpells(
-    characterClass,
-    characterLevel
-  );
+  const [formattedSpells, setFormattedSpells] =
+    useGetCharacterClassSpellsByLevel(characterClass, characterLevel);
   const [spellIndex, setSpellIndex] = React.useState(null);
 
   const handleSubmit = (e) => {
