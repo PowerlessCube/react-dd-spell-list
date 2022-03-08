@@ -8,7 +8,11 @@ const SpellList = ({
   return (
     <>
       <h2>{title}</h2>
-      {spellSlotCount && <h3>{`${spells.length} / ${spellSlotCount}`}</h3>}
+      {spellSlotCount ? (
+        <h3>{`${spells.length} / ${spellSlotCount}`}</h3>
+      ) : (
+        <h3>{spells.length}</h3>
+      )}
       <div className="container">
         {spells &&
           spells.map((spell) => (

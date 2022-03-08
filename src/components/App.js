@@ -10,6 +10,7 @@ import { formatSpellSlotTitle } from '../shared/helpers/spellDisplayPipes';
 //TODO: fill out all spellData for all classes and test it.
 //TODO: Make a global search component for spells
 //TODO: validation of spells, ensure that selected spells does not exceed known spell limit / prepared spell limit.
+//TODO: Seperate the main list out into each level spell and ensure when a spell is returned to the list it returns to the correct list.
 //TODO: Make a Spell slot count header for each selected spell with a button that increments / decrements the total within the limits of the spell slots.
 //TODO: Make it look nice.
 //TODO: Unit test the hooks.
@@ -31,7 +32,6 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormattedSpells([]);
     setSelectedSpells(defaultSelectedSpellState);
     setSpellIndex(null);
     setCharacterLevel(e.target.level.value);
