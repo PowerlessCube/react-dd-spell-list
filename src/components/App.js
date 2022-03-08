@@ -4,11 +4,11 @@ import SpellList from './SpellList';
 import useGetCharacterClassSpellsBySpellSlots from '../shared/hooks/useGetCharacterClassSpellsBySpellSlots';
 import useGetClassSpellData from '../shared/hooks/useGetClassSpellData';
 import SpellDisplay from './SpellDisplay';
+import { AppRequests } from '../shared/helpers/appRequests';
 import { formatSpellSlotTitle } from '../shared/helpers/spellDisplayPipes';
 
 //TODO: fill out all spellData for all classes and test it.
 //TODO: Make a global search component for spells
-//TODO: Separate selected spells out into levels e.g selected 3 1st level, 2 2nd level etc.
 //TODO: validation of spells, ensure that selected spells does not exceed known spell limit / prepared spell limit.
 //TODO: Make a Spell slot count header for each selected spell with a button that increments / decrements the total within the limits of the spell slots.
 //TODO: Make it look nice.
@@ -16,50 +16,57 @@ import { formatSpellSlotTitle } from '../shared/helpers/spellDisplayPipes';
 //TODO: figure out a way of displaying spell values like "concentration", "components", "casting time", "spell level"
 //TODO: Figure out warlocks...
 
+const defaultSelectedSpellState = [[], [], [], [], [], [], [], [], [], []];
+
 function App() {
   const [characterClass, setCharacterClass] = React.useState(null);
   const [characterLevel, setCharacterLevel] = React.useState(null);
   const { spellSlots } = useGetClassSpellData(characterClass, characterLevel);
-  const [selectedSpells, setSelectedSpells] = React.useState([]);
+  const [selectedSpells, setSelectedSpells] = React.useState(
+    defaultSelectedSpellState
+  );
   const [formattedSpells, setFormattedSpells] =
     useGetCharacterClassSpellsBySpellSlots(characterClass, spellSlots);
   const [spellIndex, setSpellIndex] = React.useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSelectedSpells([]);
     setFormattedSpells([]);
+    setSelectedSpells(defaultSelectedSpellState);
     setSpellIndex(null);
     setCharacterLevel(e.target.level.value);
     setCharacterClass(e.target.class.value);
   };
 
-  const handleSelection = (e) => {
+  const handleSelection = async (e) => {
+    const API_REQUESTS = new AppRequests(e.target.id);
+    const res = await fetch(API_REQUESTS.GET_SPELL_BY_INDEX);
+    const { index, name, level } = await res.json();
     setFormattedSpells(
       formattedSpells.filter((ss) => ss.index !== e.target.id)
     );
-    setSelectedSpells([
-      ...selectedSpells,
-      ...formattedSpells
-        .filter((ss) => ss.index === e.target.id)
-        .map((ss) => ({
-          ...ss,
-          selected: true,
-        })),
-    ]);
+    setSelectedSpells(
+      selectedSpells.map((ss, i) => {
+        if (i === level)
+          return [...selectedSpells[i], { index, name, level, selected: true }];
+        return ss;
+      })
+    );
   };
 
-  const handleDeSelection = (e) => {
-    setSelectedSpells(selectedSpells.filter((ss) => ss.index !== e.target.id));
-    setFormattedSpells([
-      ...selectedSpells
-        .filter((ss) => ss.index === e.target.id)
-        .map((ss) => ({
-          ...ss,
-          selected: false,
-        })),
-      ...formattedSpells,
-    ]);
+  const handleDeSelection = async (e) => {
+    const API_REQUESTS = new AppRequests(e.target.id);
+    const res = await fetch(API_REQUESTS.GET_SPELL_BY_INDEX);
+    const { index, name, level } = await res.json();
+
+    setSelectedSpells(
+      selectedSpells.map((ss, i) => {
+        if (i === level)
+          return ss.filter((spell) => spell.index !== e.target.id);
+        return ss;
+      })
+    );
+    setFormattedSpells([{ index, name, selected: false }, ...formattedSpells]);
   };
 
   const handleSpellSelection = (index) => {
@@ -93,7 +100,7 @@ function App() {
                     key={formatSpellSlotTitle(index)}
                     title={formatSpellSlotTitle(index)}
                     spellSlotCount={ss}
-                    spells={selectedSpells}
+                    spells={selectedSpells[index]}
                     handleSelection={handleDeSelection}
                     handleSpellSelection={handleSpellSelection}
                   />
