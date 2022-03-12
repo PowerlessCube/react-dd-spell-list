@@ -23,7 +23,12 @@ const SpellList = ({
                     className="form-check-input"
                     type="checkbox"
                     value=""
-                    id={spell.index}
+                    id={JSON.stringify({
+                      index: spell.index,
+                      level: spell.level,
+                      name: spell.name,
+                      selected: spell.selected,
+                    })}
                     checked={spell.selected}
                     onChange={handleSelection}
                   />

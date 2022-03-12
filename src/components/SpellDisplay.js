@@ -34,7 +34,7 @@ const SpellDisplay = ({ spellIndex }) => {
             {formatDuration(spellData.duration, spellData.concentration)}
           </p>
           <p className="card-text">{spellData.desc}</p>
-          {spellData.higher_level && (
+          {spellData.higher_level.length > 0 && (
             <p className="card-text">
               <strong>At Higher Levels: </strong>
               {spellData.higher_level}

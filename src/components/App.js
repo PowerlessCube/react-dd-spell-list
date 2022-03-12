@@ -1,16 +1,14 @@
 import React from 'react';
 import ClassForm from './ClassForm';
 import SpellList from './SpellList';
-import useGetCharacterClassSpellsBySpellSlots from '../shared/hooks/useGetCharacterClassSpellsBySpellSlots';
 import useGetClassSpellData from '../shared/hooks/useGetClassSpellData';
 import SpellDisplay from './SpellDisplay';
-import { AppRequests } from '../shared/helpers/appRequests';
 import { formatSpellSlotTitle } from '../shared/helpers/spellDisplayPipes';
+import useGetCharacterClassSpellsBySpellSlots from '../shared/hooks/useGetCharacterClassSpellsBySpellSlots';
 
 //TODO: fill out all spellData for all classes and test it.
 //TODO: Make a global search component for spells
 //TODO: validation of spells, ensure that selected spells does not exceed known spell limit / prepared spell limit.
-//TODO: Seperate the main list out into each level spell and ensure when a spell is returned to the list it returns to the correct list.
 //TODO: Make a Spell slot count header for each selected spell with a button that increments / decrements the total within the limits of the spell slots.
 //TODO: Make it look nice.
 //TODO: Unit test the hooks.
@@ -26,9 +24,9 @@ function App() {
   const [selectedSpells, setSelectedSpells] = React.useState(
     defaultSelectedSpellState
   );
+  const [spellIndex, setSpellIndex] = React.useState(null);
   const [formattedSpells, setFormattedSpells] =
     useGetCharacterClassSpellsBySpellSlots(characterClass, spellSlots);
-  const [spellIndex, setSpellIndex] = React.useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,13 +36,8 @@ function App() {
     setCharacterClass(e.target.class.value);
   };
 
-  const handleSelection = async (e) => {
-    const API_REQUESTS = new AppRequests(e.target.id);
-    const res = await fetch(API_REQUESTS.GET_SPELL_BY_INDEX);
-    const { index, name, level } = await res.json();
-    setFormattedSpells(
-      formattedSpells.filter((ss) => ss.index !== e.target.id)
-    );
+  const handleSelection = (e) => {
+    const { index, name, level } = JSON.parse(e.target.id);
     setSelectedSpells(
       selectedSpells.map((ss, i) => {
         if (i === level)
@@ -52,21 +45,33 @@ function App() {
         return ss;
       })
     );
-  };
-
-  const handleDeSelection = async (e) => {
-    const API_REQUESTS = new AppRequests(e.target.id);
-    const res = await fetch(API_REQUESTS.GET_SPELL_BY_INDEX);
-    const { index, name, level } = await res.json();
-
-    setSelectedSpells(
-      selectedSpells.map((ss, i) => {
+    setFormattedSpells(
+      formattedSpells.map((ss, i) => {
         if (i === level)
-          return ss.filter((spell) => spell.index !== e.target.id);
+          return [...formattedSpells[i].filter((s) => s.index !== index)];
         return ss;
       })
     );
-    setFormattedSpells([{ index, name, selected: false }, ...formattedSpells]);
+  };
+
+  const handleDeSelection = (e) => {
+    const { index, name, level } = JSON.parse(e.target.id);
+    setSelectedSpells(
+      selectedSpells.map((ss, i) => {
+        if (i === level) return ss.filter((spell) => spell.index !== index);
+        return ss;
+      })
+    );
+    setFormattedSpells(
+      formattedSpells.map((ss, i) => {
+        if (i === level)
+          return [
+            { index, name, level, selected: false },
+            ...formattedSpells[i],
+          ];
+        return ss;
+      })
+    );
   };
 
   const handleSpellSelection = (index) => {
@@ -83,14 +88,20 @@ function App() {
             <SpellDisplay spellIndex={spellIndex} />
           </div>
           <div className="col">
-            <SpellList
-              title={'Class Spells'}
-              count={formattedSpells.length}
-              spells={formattedSpells}
-              spellSlots={spellSlots}
-              handleSelection={handleSelection}
-              handleSpellSelection={handleSpellSelection}
-            />
+            {formattedSpells &&
+              formattedSpells.map((spells, index) => {
+                return (
+                  <SpellList
+                    key={formatSpellSlotTitle(index)}
+                    title={formatSpellSlotTitle(index)}
+                    count={spells.length}
+                    spells={spells}
+                    spellSlots={spellSlots}
+                    handleSelection={handleSelection}
+                    handleSpellSelection={handleSpellSelection}
+                  />
+                );
+              })}
           </div>
           <div className="col">
             {spellSlots &&
